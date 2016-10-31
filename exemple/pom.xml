@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.gbz</groupId>
+	<artifactId>testCodeInGame</artifactId>
+	<version>0.0.1</version>
+	<packaging>jar</packaging>
+
+	<name>testCodeInGame</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<execution>
+					 <phase>package</phase>
+						<goals>
+							<goal>compress</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+				
+					<nosuffix>true</nosuffix>
+					<aggregations>
+						<aggregation>
+							<!-- remove files after aggregation (default: false) <removeIncluded>true</removeIncluded> -->
+							<!-- insert new line after each concatenation (default: false) -->
+							<insertNewLine>true</insertNewLine>
+							<output>${project.basedir}/target/codingame/src/Player_v${project.version}.java</output>
+							<!-- files to include, path relative to output's directory or absolute 
+								path -->
+							<inputDir>${project.basedir}/src/main/java</inputDir>
+							<includes>
+								<!-- include your class -->
+								 <include>**/*.java</include>
+							</includes>
+							<!-- files to exclude, path relative to output's directory <excludes> 
+								<exclude>**/*.pack.js</exclude> <exclude>**/compressed.css</exclude> </excludes> -->
+						</aggregation>
+					</aggregations>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- remove your import -->
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+					<phase>package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<ignoreMissingFile>true</ignoreMissingFile>
+					
+					<file>${project.basedir}/target/codingame/src/Player_v${project.version}.java</file>
+					<outputFile>
+						${project.basedir}/target/codingame/src/Player_v${project.version}.java
+					</outputFile>
+					<regex>true</regex>
+					<regexFlags>
+						<regexFlag>DOTALL</regexFlag>
+						<regexFlag>MULTILINE</regexFlag>
+					</regexFlags>
+					<!-- this the token i am using to remove import, you can add your own -->
+					<token>\/\*\*begin import\*\*\/.*?\/\*\*end import\*\*\/</token>
+					<value></value>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>
